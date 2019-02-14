@@ -1,16 +1,34 @@
 $row-padding: 2px;
 $hover-padding: 3px;
 .rowWrapper {
-  padding: $row-padding $row-padding $row-padding 0;
+  //padding: $row-padding $row-padding $row-padding 0;
   height: 100%;
   box-sizing: border-box;
-  cursor: move;
-
+  padding: 0;
   &:hover {
-    opacity: 0.7;
-    padding: $hover-padding $hover-padding $hover-padding 0;
+    opacity: 1;
   }
-
+  &.rowWrapperAll {
+    flex-grow: 1;
+  }
+  &.rowWrapperHolder {
+    flex-basis: 78px;
+    display: flex;
+    & .label-dragHolder {
+      flex-basis: 58px;
+      align-items: center;
+      cursor: move;
+    }
+    & .label-checkbox {
+      flex-basis: 20px;
+      display: flex;
+      align-items: center;
+    }
+  }
+  //&:hover {
+  //  //opacity: 0.7;
+  //  //padding: $hover-padding $hover-padding $hover-padding 0;
+  //}
   &:active {
     opacity: 1;
   }
@@ -24,10 +42,10 @@ $hover-padding: 3px;
 }
 
 .row {
+  padding-left: 0;
   height: 100%;
   white-space: nowrap;
   display: flex;
-
   & > * {
     box-sizing: border-box;
   }
@@ -37,24 +55,33 @@ $hover-padding: 3px;
  * The outline of where the element will go if dropped, displayed while dragging
  */
 .rowLandingPad {
+  cursor: -webkit-grabbing !important;
   border: none !important;
   box-shadow: none !important;
   outline: none !important;
-  width: 500px;
+  width: 100%;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  border-left: 3px solid #5344AD;
+  position: absolute;
+  //height: 6px;
   * {
-    opacity: 0 !important;
+    opacity: 0.6 !important;
+    cursor: -webkit-grabbing !important;
   }
-
+  //.rowToolbar {
+  //  display: none;
+  //}
   &::before {
-    background-color: lightblue;
     content: '';
+    z-index: 12;
+    background-color: #5344AD;
     position: absolute;
-    top: 0;
     right: 0;
-    bottom: 0;
+    top: 26px;
     left: 0;
-    z-index: -1;
     width: 100%;
+    height: 4px;
   }
 }
 
@@ -92,32 +119,48 @@ $hover-padding: 3px;
   @extend %rowItem;
   position: relative;
   height: 100%;
-  padding: 0 5px 0 30px;
+  padding: 0;
   min-width: 230px;
   flex: 1 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: white;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  box-shadow: none;
   &:hover {
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-    box-shadow: 0 5px 10px rgba(0,0,0,0.19), 0 3px 3px rgba(0,0,0,0.23);
+    //box-shadow: 0 5px 10px rgba(0,0,0,0.19), 0 3px 3px rgba(0,0,0,0.23);
+    box-shadow: none;
   }
+}
+
+.rowContentsDragDisabled {
+  box-sizing: border-box;
 }
 
 .rowLabel {
   @extend %rowItem;
-  flex: 0 1 auto;
+  //flex: 0 1 auto;
   padding-right: 20px;
   width: 100%;
+  height: 100%;
+  display: flex;
+  //align-items: center;
+  flex: 0 0 220px;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .rowToolbar {
   @extend %rowItem;
   flex: 0 1 auto;
   display: flex;
+
+  height: 100%;
+  align-items: center;
+  flex-grow: 1 !important;
 }
 
 .moveHandle {
@@ -129,8 +172,8 @@ $hover-padding: 3px;
     url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MiIgaGVpZ2h0PSI0MiI+PGcgc3Ryb2tlPSIjRkZGIiBzdHJva2Utd2lkdGg9IjIuOSIgPjxwYXRoIGQ9Ik0xNCAxNS43aDE0LjQiLz48cGF0aCBkPSJNMTQgMjEuNGgxNC40Ii8+PHBhdGggZD0iTTE0IDI3LjFoMTQuNCIvPjwvZz4KPC9zdmc+')
     no-repeat center;
   border: solid #aaa 1px;
-  box-shadow: 0 2px 2px -2px;
-  cursor: move;
+  //box-shadow: 0 2px 2px -2px;
+  cursor: grabbing;
   border-radius: 1px;
   z-index: 1;
 }
@@ -205,7 +248,13 @@ $hover-padding: 3px;
 }
 
 .rowTitle {
-  font-weight: bold;
+  font-weight: 600;
+  color: #3578E5;
+}
+.rowType {
+  font-weight: 300;
+  color: #42526E;
+  display: none;
 }
 
 .rowTitleWithSubtitle {
@@ -235,19 +284,23 @@ $hover-padding: 3px;
   cursor: pointer;
   z-index: 1000;
   transform: translate(-50%, -50%);
-  cursor: pointer;
   &:focus {outline:0;}
 }
 
 .collapseButton {
+  height: 100%;
   &:before {
-    content: "\25bc";
+    content: "\203A";
+    transform: rotate(90deg);
+    display: inline-block;
   }
 }
 
 .expandButton {
+  height: 100%;
   &:before {
-    content:"\25b6";
+    content: "\203A";
+    display: inline-block;
   }
 }
 
@@ -262,4 +315,9 @@ $hover-padding: 3px;
 
 .contentContainer {
   width: 75%;
+}
+// additional styles
+.mainRowToolbar {
+  display: flex;
+  height: 100%;
 }

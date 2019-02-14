@@ -145,7 +145,7 @@ class App extends Component {
             searchQuery={searchString}
             searchFocusOffset={searchFocusIndex}
             style={{width: '600px'}}
-            rowHeight={45}
+            rowHeight={56}
             searchFinishCallback={matches =>
               this.setState({
                 searchFoundCount: matches.length,

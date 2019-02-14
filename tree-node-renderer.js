@@ -4,9 +4,10 @@ import styles from './tree-node-renderer.scss';
 
 class MinimalThemeTreeNodeRenderer extends Component {
   constructor (props) {
-    super(props)
+    super(props);
 
-    this.state = {}
+    this.state = {};
+    
     this.bound = {
       handleMouseOver: this.handleMouseOver.bind(this),
       handleMouseLeave: this.handleMouseLeave.bind(this)
@@ -29,8 +30,6 @@ class MinimalThemeTreeNodeRenderer extends Component {
       swapFrom,
       swapLength,
       swapDepth,
-      scaffoldBlockPxWidth,
-      lowerSiblingCounts,
       connectDropTarget,
       isOver,
       draggedNode,
@@ -42,26 +41,34 @@ class MinimalThemeTreeNodeRenderer extends Component {
       getPrevRow, // Delete from otherProps
       node, // Delete from otherProps
       path, // Delete from otherProps
+      scaffoldBlockPxWidth,
+      lowerSiblingCounts,
       ...otherProps
     } = this.props;
+  
     // Construct the scaffold representing the structure of the tree
-    const scaffoldBlockCount = lowerSiblingCounts.length - 1;
-    let dropType
+    let dropType;
     if (canDrop && !isOver) {
       dropType = 'validDrop'
     } else if (!canDrop && isOver) {
       dropType = 'invalidDrop'
     }
-
+  
     return connectDropTarget(
-      <div {...otherProps} onMouseOver={this.bound.handleMouseOver} onMouseLeave={this.bound.handleMouseLeave} {...otherProps} onFocus={ () => {} } className={styles.node + (this.state.highlight ? ` ${styles.highlight}` : '') + (dropType ? ` ${styles[dropType]}` : '')}>
+      <div
+           {...otherProps}
+           onMouseOver={this.bound.handleMouseOver}
+           onMouseLeave={this.bound.handleMouseLeave}
+           onFocus={ () => {} }
+           className={styles.node + (this.state.highlight ? ` ${styles.highlight}` : '') + (dropType ? ` ${styles[dropType]}` : '')}
+      >
         <div
           className={styles.nodeContent}
-          style={{paddingLeft: scaffoldBlockPxWidth * scaffoldBlockCount}}
         >
           {Children.map(children, child =>
             cloneElement(child, {
               isOver,
+              lowerSiblingCounts,
               canDrop,
               draggedNode,
             })
@@ -71,6 +78,7 @@ class MinimalThemeTreeNodeRenderer extends Component {
     );
   }
 }
+
 MinimalThemeTreeNodeRenderer.defaultProps = {
   swapFrom: null,
   swapDepth: null,
@@ -85,8 +93,8 @@ MinimalThemeTreeNodeRenderer.propTypes = {
   swapFrom: PropTypes.number,
   swapDepth: PropTypes.number,
   swapLength: PropTypes.number,
-  scaffoldBlockPxWidth: PropTypes.number.isRequired,
   lowerSiblingCounts: PropTypes.arrayOf(PropTypes.number).isRequired,
+  scaffoldBlockPxWidth: PropTypes.arrayOf(PropTypes.array).isRequired,
   treeId: PropTypes.string.isRequired,
   listIndex: PropTypes.number.isRequired,
   rowDirection: PropTypes.string,
